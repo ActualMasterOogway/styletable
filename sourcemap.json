@@ -1,0 +1,1 @@
+{"name":"StyleTable","className":"DataModel","filePaths":["default.project.json"],"children":[{"name":"ServerScriptService","className":"ServerScriptService","children":[{"name":"Main","className":"Script","filePaths":["test/Main.server.luau"]},{"name":"Packages","className":"Folder","children":[{"name":"StyleTable","className":"ModuleScript","filePaths":["src/init.luau"]}]}]}]}

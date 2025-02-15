@@ -1,0 +1,10 @@
+[package]
+name = "cameronpcampbell/styletable"
+description="A Lightweight library for defining StyleSheets in Roblox."
+version = "1.0.1"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+license = "MIT"
+authors=[ "Cameron Campbell" ]
+exclude=[ "**" ]
+include=[ "src", "src/**", "default.project.json", "wally.toml", "wally.lock", "default.project.json", "LICENSE.md" ]

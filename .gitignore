@@ -1,0 +1,10 @@
+# Project place file
+/StyleTable.rbxlx
+
+# Roblox Studio lock files
+/*.rbxlx.lock
+/*.rbxl.lock
+
+# Macos file system junk
+._*
+.DS_STORE
