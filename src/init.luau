@@ -1,17 +1,13 @@
 --!strict
 --!optimize 2
 
-export type StyleTable = {
-    ["@derives"]: { StyleSheet }?,
-    [string]: any
-}
+local types = require(script["init.types"])
 
-export type StyleTableRule = {
-    ["@priority"]: number?,
-    [string]: any | StyleTableRule
-}
+export type StyleTable = types.StyleTable
 
-export type StyleParent = StyleSheet | StyleRule
+export type StyleTableRule =types.StyleTableRule
+
+export type StyleParent = types.StyleParent
 
 local function ParseAttribute(key: any, value: any, parent: StyleParent): boolean
     if type(key) ~= "string" then return false end
@@ -38,7 +34,20 @@ local function ParseProperty(key: any, value: any, parent: StyleRule): boolean
     return true
 end
 
-local function ParseRule(key: any, value: any, parent: StyleParent): boolean
+local function ParseRuleProperties(value: StyleTableRule, styleRule: StyleRule)
+    for key, value in value do
+        if type(key) == "number" and type(value) == "table" then
+            ParseRuleProperties(value :: StyleTableRule, styleRule)
+            continue
+        end
+
+        if ParseRule(key, value, styleRule) then continue end
+        if ParseAttribute(key, value, styleRule) then continue end
+        ParseProperty(key, value, styleRule)
+    end
+end
+
+function ParseRule(key: any, value: any, parent: StyleParent): boolean
     if type(key) ~= "string" or type(value) ~= "table" then return false end
 
     local styleRule = Instance.new("StyleRule")
@@ -48,11 +57,7 @@ local function ParseRule(key: any, value: any, parent: StyleParent): boolean
     local priority = value["@priority"]
     if priority then value["@priority"] = nil end
 
-    for key, value in value do
-        if ParseRule(key, value, styleRule) then continue end
-        if ParseAttribute(key, value, styleRule) then continue end
-        ParseProperty(key, value, styleRule)
-    end
+    ParseRuleProperties(value, styleRule)
 
     styleRule.Parent = parent
 
@@ -73,16 +78,25 @@ local function ParseDerive(value: any, parent: StyleSheet): boolean
     return true
 end
 
+local function ParseSheetProperties(styleTable: StyleTable, styleSheet: StyleSheet)
+    for key, value in styleTable do
+        if type(key) == "number" and type(value) == "table" then
+            ParseSheetProperties(value :: StyleTable, styleSheet)
+            continue
+        end
+
+        if ParseRule(key, value, styleSheet) then continue end
+        ParseAttribute(key, value, styleSheet)
+    end
+end
+
 return function(styleTable: StyleTable)
     local styleSheet = Instance.new("StyleSheet")
 
     local derives = styleTable["@derives"]
     if derives then styleTable["@derives"] = nil end
 
-    for key, value in styleTable do
-        if ParseRule(key, value, styleSheet) then continue end
-        ParseAttribute(key, value, styleSheet)
-    end
+    ParseSheetProperties(styleTable, styleSheet)
 
     if type(derives) == "table" then
         for key, value in derives do

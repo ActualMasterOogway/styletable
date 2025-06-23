@@ -2,6 +2,8 @@
 --!optimize 2
 
 local StyleTable = require(script.Parent.Packages.StyleTable)
+local StyleMacros = require(script.Parent.Packages.StyleTable.macros)
+local Padding, CornerRadius, Scale = StyleMacros.Padding, StyleMacros.CornerRadius, StyleMacros.Scale
 
 local AttributeStyles = StyleTable {
     ["$FontFace"] = Font.fromName("BuilderSans", Enum.FontWeight.SemiBold),
@@ -22,6 +24,8 @@ local ButtonStyles = StyleTable {
         FontFace = "$FontFace",
         TextColor3 = "$ColorText",
         TextSize = "$TextSize",
+        CornerRadius (UDim.new(0, 8)),
+        Padding (UDim.new(0, 10)),
 
         [".Primary"] = {
             BackgroundColor3 = "$ColorPrimary"
@@ -38,17 +42,6 @@ local ButtonStyles = StyleTable {
         [".Disabled"] = {
             BackgroundTransparency = .4,
             Interactable = false
-        },
-
-        ["::UIPadding"] = {
-            PaddingLeft = UDim.new(0, 10),
-            PaddingRight = UDim.new(0, 10),
-            PaddingTop = UDim.new(0, 10),
-            PaddingBottom = UDim.new(0, 10)
-        },
-
-        ["::UICorner"] = {
-            CornerRadius = UDim.new(0, 8)
         }
     }
 }
