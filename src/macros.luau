@@ -7,46 +7,19 @@ local types = require(script.Parent["init.types"])
     Four arguments: Top, Right, Bottom, Left.
 ]=]
 local function Padding(one: UDim, two: UDim?, three: UDim?, four: UDim?): types.StyleTableRule
-    if one and two and three and four then
-        return {
-            ["::UIPadding"] = {
-                PaddingTop = one,
-                PaddingRight = two,
-                PaddingBottom = three,
-                PaddingLeft = four
-            }
-        }
+    local top = one
+    local right = two or one
+    local bottom = three or one
+    local left = four or two or one
 
-    elseif one and two and three then
-        return {
-            ["::UIPadding"] = {
-                PaddingTop = one,
-                PaddingLeft = two,
-                PaddingRight = two,
-                PaddingBottom = three
-            }
+    return {
+        ["::UIPadding"] = {
+            PaddingTop = top,
+            PaddingRight = right,
+            PaddingBottom = bottom,
+            PaddingLeft = left
         }
-
-    elseif one and two then
-        return {
-            ["::UIPadding"] = {
-                PaddingTop = one;
-                PaddingBottom = one;
-                PaddingLeft = two;
-                PaddingRight = two;
-            }
-        }
-
-    else
-        return {
-            ["::UIPadding"] = {
-                PaddingTop = one :: UDim,
-                PaddingBottom = one :: UDim,
-                PaddingLeft = one :: UDim,
-                PaddingRight = one :: UDim
-            }
-        }
-    end
+    }
 end
 
 local function CornerRadius(cornerRadius: UDim): types.StyleTableRule
